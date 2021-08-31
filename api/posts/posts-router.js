@@ -40,3 +40,5 @@ router.post('/', (req,res) => {
             res.status(500).json({message: 'There was an error while saving the post to the database'})
         })
 })
+
+router.put
