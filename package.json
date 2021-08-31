@@ -9,11 +9,11 @@
     "resetdb": "knex migrate:rollback && knex migrate:latest && knex seed:run"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "knex": "^0.95.10",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
-    "express": "^4.17.1",
     "@types/jest": "^27.0.1",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
