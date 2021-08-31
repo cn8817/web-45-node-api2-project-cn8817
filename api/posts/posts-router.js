@@ -30,10 +30,10 @@ router.get('/:id', (req,res)=> {
 router.post('/', (req,res) => {
     Post.insert(req.body)
         .then(posts => {
-            if(posts) {
-                res.status(201).json(posts)
-            } else {
+            if(!req.body.title || !req.body.contents ) {
                 res.status(400).json({message: 'Please provide title and contents for the post'})
+            } else {
+                res.status(201).json(posts)
             }
         })
         .catch(err => {
@@ -41,6 +41,60 @@ router.post('/', (req,res) => {
         })
 })
 
-// router.put
+router.put('/:id', (req,res) => {
+    const changes = req.body
+    Post.update(req.params.id, changes)
+        .then(posts => {
+            if(!changes.title || !changes.contents) {
+                res.status(400).json({message: "Please provide title and contents for the post"})
+            } else if(!changes.id){
+                res.status(404).json({message:'The post with the specified ID does not exist'})
+            } else {
+                res.status(200).json(posts)
+            }
+        })
+        .catch(err => {
+            res.status(500).json({message: "The post information could not be modified"})
+        })
+        
+})
+
+router.delete('/:id', (req,res) => {
+    Post.remove(req.params.id)
+        .then(posts => {
+            if(posts > 0) {
+                res.status(200).json(posts)
+            } else {
+                res.status(404).json({ message: "The post with the specified ID does not exist" })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({message: "The post could not be removed"})
+        })
+})
+
+// router.get('/', (req,res) => {
+//     Post.findPostComments(req.query)
+//         .then(posts => {
+//             res.status(200).json(posts)
+//         })
+//         .catch(err => {
+//             res.status(500).json({message: 'The posts information could not be retrieved'})
+//         })
+// })
+
+router.get('/:id/comments', (req,res) => {
+    Post.findCommentById(req.params.id)
+        .then(comment => {
+            if(!comment){
+                res.status(404).json({ message: "The post with the specified ID does not exist" })
+            } else {
+                res.status(200).json(posts)
+            }
+        })
+        .catch(err => {
+            res.status(500).json({message: "The comments information could not be retrieved"})
+        })
+})
 
 module.exports = router
